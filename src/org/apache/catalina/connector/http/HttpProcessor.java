@@ -874,6 +874,7 @@ final class HttpProcessor
      * swallowed and dealt with.
      *
      * @param socket The socket on which we are connected to the client
+     * 解析请求并调用invoke方法
      */
     private void process(Socket socket) {
         boolean ok = true;
@@ -1044,9 +1045,6 @@ final class HttpProcessor
             log("process.invoke", e);
         }
         socket = null;
-
-
-
     }
 
 

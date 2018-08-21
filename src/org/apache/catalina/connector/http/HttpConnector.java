@@ -1012,10 +1012,10 @@ public final class HttpConnector
             }
             //            if (debug >= 3)
             //                log("run: Assigning socket to processor " + processor);
+            // 处理新连接的请求
+            // 异步实现的处理
             processor.assign(socket);
-
             // The processor will recycle itself when it finishes
-
         }
 
         // Notify the threadStop() method that we have shut ourselves down

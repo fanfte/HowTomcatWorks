@@ -1,5 +1,7 @@
 package cxs01.pyrmont;
 
+import com.sun.deploy.util.StringUtils;
+
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.InetAddress;
@@ -32,6 +34,7 @@ public class HttpServer {
 
   public void await() {
     ServerSocket serverSocket = null;
+    System.out.println("webroot " + WEB_ROOT);
     int port = 8080;
     try {
       serverSocket =  new ServerSocket(port, 1, InetAddress.getByName("127.0.0.1"));
@@ -64,7 +67,9 @@ public class HttpServer {
         socket.close();
 
         //check if the previous URI is a shutdown command
-        shutdown = request.getUri().equals(SHUTDOWN_COMMAND);
+        if(request.getUri() != null && !request.getUri().equals("")) {
+          shutdown = request.getUri().equals(SHUTDOWN_COMMAND);
+        }
       }
       catch (Exception e) {
         e.printStackTrace();

@@ -59,8 +59,7 @@ public class HttpProcessor {
       if (request.getRequestURI().startsWith("/servlet/")) {
         ServletProcessor processor = new ServletProcessor();
         processor.process(request, response);
-      }
-      else {
+      } else {
         StaticResourceProcessor processor = new StaticResourceProcessor();
         processor.process(request, response);
       }
@@ -106,6 +105,7 @@ public class HttpProcessor {
       request.addHeader(name, value);
       // do something for some headers, ignore others.
       if (name.equals("cookie")) {
+        // 解析Cookie请求头
         Cookie cookies[] = RequestUtil.parseCookieHeader(value);
         for (int i = 0; i < cookies.length; i++) {
           if (cookies[i].getName().equals("jsessionid")) {
@@ -142,6 +142,8 @@ public class HttpProcessor {
 
     // Parse the incoming request line
     input.readRequestLine(requestLine);
+
+    // 获取请求方法
     String method =
       new String(requestLine.method, 0, requestLine.methodEnd);
     String uri = null;
@@ -154,7 +156,9 @@ public class HttpProcessor {
     else if (requestLine.uriEnd < 1) {
       throw new ServletException("Missing HTTP request URI");
     }
+
     // Parse any query parameters out of the request URI
+    // 获取查询字符串
     int question = requestLine.indexOf("?");
     if (question >= 0) {
       request.setQueryString(new String(requestLine.uri, question + 1,
@@ -168,6 +172,7 @@ public class HttpProcessor {
 
 
     // Checking for an absolute URI (with the HTTP protocol)
+    // 检查是否是绝对路径
     if (!uri.startsWith("/")) {
       int pos = uri.indexOf("://");
       // Parsing out protocol and host name
@@ -191,8 +196,7 @@ public class HttpProcessor {
       if (semicolon2 >= 0) {
         request.setRequestedSessionId(rest.substring(0, semicolon2));
         rest = rest.substring(semicolon2);
-      }
-      else {
+      } else {
         request.setRequestedSessionId(rest);
         rest = "";
       }
